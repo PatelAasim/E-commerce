@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Login - My Ecommerce{% endblock %}
+
+{% block content %}
+<div style="min-height: 100vh; display: flex; justify-content: center; align-items: center; background-color: #f3f4f6;">
+  <div style="width: 100%; max-width: 400px; background-color: white; padding: 32px; border-radius: 16px; box-shadow: 0 0 15px rgba(0,0,0,0.1);">
+    
+    <!-- Logo -->
+    <div style="text-align: center; margin-bottom: 24px;">
+      <img src="{% static 'image/logo.png' %}" alt="Logo" style="max-width: 200px; height: auto; margin: 0 auto;">
+    </div>
+
+    <h2 style="font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 24px;">Login to Your Account</h2>
+    <form method="POST">
+      {% csrf_token %}
+
+      <!-- Username -->
+      <div style="margin-bottom: 16px;">
+        <label for="username" style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500;">Username</label>
+        <input type="text" name="username" id="username" required
+               style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px;">
+      </div>
+
+      <!-- Password -->
+      <div style="margin-bottom: 16px;">
+        <label for="password" style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500;">Password</label>
+        <input type="password" name="password" id="password" required
+               style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px;">
+      </div>
+
+      <!-- Submit Button -->
+      <div style="margin-bottom: 16px;">
+        <button type="submit"
+                style="width: 100%; padding: 12px; background-color: #007BFF; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+          Login
+        </button>
+      </div>
+    </form>
+
+    <!-- Register Link -->
+    <div style="text-align: center; font-size: 14px;">
+      <p>Don't have an account? <a href="{% url 'register' %}" style="color: #007BFF; text-decoration: none;">Register here</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

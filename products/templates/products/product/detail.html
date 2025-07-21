@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+
+<div style="width: 100%; padding: 24px;">
+    <div style="display: flex; gap: 32px; background-color: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); max-width: 1000px;">
+        
+        <div style="flex: 0 0 400px; text-align: center;">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; max-width: 400px; height: 400px; object-fit: contain; border-radius: 8px; background-color: #f9fafb; padding: 8px;">
+            {% else %}
+            <p style="font-size: 14px; color: #999;">The product image is not available</p>
+            {% endif %}
+        </div>
+
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+            <h1 style="font-size: 30px; font-weight: bold; margin-bottom: 16px; color: #111827;">{{ product.name }}</h1>
+            <p style="font-size: 16px; color: #4b5563; margin-bottom: 16px; line-height: 1.6;">{{ product.description }}</p>
+            <p style="font-size: 24px; color: #4f46e5; font-weight: bold; margin-bottom: 24px;">₹{{ product.price }}</p>
+
+            <form action="{% url 'cart:cart_add' product.id %}" method="post" id="add-to-cart-form" style="margin-top: 16px;">
+                {% csrf_token %}
+                <button type="submit" style="background-color: #4f46e5; color: #fff; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; transition: background-color 0.3s;">
+                    Add to Cart
+                </button>
+                <p id="messege" style="margin-top: 12px; font-size: 14px;"></p>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+  document.getElementById('add-to-cart-form').addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const url = form.action;
+    const formData = new FormData(form);
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+      },
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      const messageElement = document.getElementById('messege');
+      if (data.success) {
+        messageElement.textContent = data.message || "Added to cart!";
+        messageElement.style.color = "#16a34a";  // green on success
+      } else {
+        messageElement.textContent = "Failed to add to cart";
+        messageElement.style.color = "#dc2626";  // red on fail
+      }
+    })
+    .catch(error => {
+      console.error("Error", error);
+    });
+  });
+</script>
+
+{% endblock %}

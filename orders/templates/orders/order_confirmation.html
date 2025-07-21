@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Confirmation{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto; padding: 2rem; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); opacity: 0; transform: scale(0.95); animation: fadeInScaleUp 0.5s ease-out forwards;">
+    <h2 style="color: #38a169; font-weight: 600; text-align: center; margin-bottom: 1.5rem;">Your order has been successfully placed!!</h2>
+    
+    <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Order ID: #{{ order.id }}</h3>
+    
+    <ul style="list-style-type: none; padding-left: 0; margin-bottom: 2rem;">
+        {% for item in order.items.all %}
+            <li style="display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; padding: 0.5rem 0;">
+                <strong>{{ item.quantity }} x {{ item.product.name }}</strong>
+                <span style="color: #4f46e5;">₹{{ item.price }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+    
+    <p style="font-size: 1.25rem; font-weight: 600; color: #4f46e5; text-align: right;">Total: ₹{{ order.get_total_cost }}</p>
+</div>
+
+<style>
+    @keyframes fadeInScaleUp {
+        0% {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+</style>
+
+{% endblock %}
